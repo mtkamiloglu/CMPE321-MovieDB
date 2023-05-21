@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, session
 import MySQLdb
 import json
 
 app = Flask(__name__)
+app.secret_key = 'super secret key'
  
 HOST = 'localhost'
 USER = 'root'
@@ -120,6 +121,7 @@ def director_login():
         print(result)
 
         if result:
+            session['username'] = username
             return "<p>Login Successful</p>"
         else:
             return "<p>Username or password is wrong</p>"
@@ -131,9 +133,21 @@ def list_theatres():
     return "<p>List Theatres</p>"
 
 # directors should be able add movies
-@app.route('/director/add_movie')
+@app.route('/director/add_movie', methods=['GET', 'POST'])
 def add_movie():
-    return "<p>Add Movie</p>"
+    if request.method == 'GET':
+        return render_template('add_movie.html')
+    else:
+        movie_id = request.form.get('movie_id')
+        movie_name = request.form.get('movie_name')
+        duration = request.form.get('duration')
+        director_user_name = session.get('username')
+        genres = request.form.get('genre_list')
+
+        query = "INSERT INTO Movie (movie_id, name, duration, average_rating, director_user_name, genres) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (movie_id, movie_name, duration, '0', director_user_name, genres))
+        mysql_conn.commit()
+        return "<p>Movie is added</p>"
 
 # directors should be able to add predeccessor to a movie
 @app.route('/director/add_predecessor')
