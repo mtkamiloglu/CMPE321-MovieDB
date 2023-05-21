@@ -95,9 +95,25 @@ def see_ratings():
     return "<p>See Ratings</p>"
 
 # db managers should be able to see all movies of a director
-@app.route('/manager/see_movies')
+@app.route('/manager/see_movies', methods=['GET', 'POST'])
 def see_movies():
-    return "<p>See Movies</p>"
+    if request.method == 'GET':
+        return render_template('see_movies.html')
+    else:
+        director_user_name = request.form.get('username')
+        query = '''SELECT m.movie_id, m.name, ms.theatre_id, t.district, ms.time_slot
+                FROM Movie_Session ms
+                JOIN Movie m ON ms.movie_id = m.movie_id
+                JOIN Theatre t ON ms.theatre_id = t.theatre_id
+                WHERE m.director_user_name = %s'''
+
+        cursor.execute(query, [director_user_name])
+        movies = cursor.fetchall()
+        jsonStr = json.dumps(movies)
+        jsonArr = json.loads(jsonStr)
+        mysql_conn.commit()
+        return render_template('show_movies.html', movies=jsonArr)
+
 
 # db manager should be able to see average rating of a movie
 @app.route('/manager/see_average_rating', methods=['GET', 'POST'])
