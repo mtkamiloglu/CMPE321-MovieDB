@@ -21,7 +21,7 @@ def hello():
 def login():
     
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('manager_login.html')
     
     else:
         username = request.form.get('username')
@@ -104,9 +104,26 @@ def see_average_rating():
     return "<p>See Average Rating</p>"
 
 # directors should be able to login to the system
-@app.route('/director_login')
+@app.route('/director/login', methods=['GET', 'POST'])
 def director_login():
-    return "<p>Director Login</p>"
+    if request.method == 'GET':
+        return render_template('director_login.html')
+    
+    else:
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        query = "SELECT * FROM Director WHERE user_name = %s AND password = %s"
+        cursor.execute(query, (username, password))
+        mysql_conn.commit()
+        result = cursor.fetchone()
+        print(result)
+
+        if result:
+            return "<p>Login Successful</p>"
+        else:
+            return "<p>Username or password is wrong</p>"
+
 
 # directors should be able to list all theatres available for the given slot
 @app.route('/director/list_theatres')
