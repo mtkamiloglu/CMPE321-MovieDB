@@ -1,12 +1,13 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import MySQLdb
+import json
 
 app = Flask(__name__)
  
 HOST = 'localhost'
 USER = 'root'
 PASSWD = 'tayyip2001'
-DATABASE = 'sys'
+DATABASE = 'movies'
 
 mysql_conn = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWD, db=DATABASE)
 cursor = mysql_conn.cursor()
@@ -28,7 +29,7 @@ def login():
 
         query = "SELECT * FROM Database_Manager WHERE user_name = %s AND password = %s"
         cursor.execute(query, (username, password))
-
+        mysql_conn.commit()
         result = cursor.fetchone()
         print(result)
 
@@ -77,9 +78,15 @@ def update_platform_id():
     return "<p>Update Platform ID</p>"
 
 # db managers should be able to see all directors
-@app.route('/manager/see_directors')
+@app.route('/manager/see_directors', methods=['GET', 'POST'])
 def see_directors():
-    return "<p>See Directors</p>"
+    query = "SELECT * FROM Director"
+    cursor.execute(query)
+    directors = cursor.fetchall()
+    jsonStr = json.dumps(directors)
+    jsonArr = json.loads(jsonStr)
+    mysql_conn.commit()
+    return render_template('see_directors.html', directors=jsonArr)
 
 # db managers should be able to see all ratings of a user
 @app.route('/manager/see_ratings')
