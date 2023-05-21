@@ -100,9 +100,17 @@ def see_movies():
     return "<p>See Movies</p>"
 
 # db manager should be able to see average rating of a movie
-@app.route('/manager/see_average_rating')
+@app.route('/manager/see_average_rating', methods=['GET', 'POST'])
 def see_average_rating():
-    return "<p>See Average Rating</p>"
+    if request.method == 'GET':
+        return render_template('see_average_rating.html')
+    else:
+        movie_id = request.form.get('movie_id')
+        query = "SELECT movie_id, name, average_rating FROM Movie WHERE movie_id = %s"
+        cursor.execute(query, [movie_id])
+        result = cursor.fetchone()
+        mysql_conn.commit()
+        return render_template('show_average_rating.html', result=result)
 
 # directors should be able to login to the system
 @app.route('/director/login', methods=['GET', 'POST'])
@@ -157,7 +165,7 @@ def add_predecessor():
     else:
         movie_id = request.form.get('movie_id')
         predecessor_id = request.form.get('predecessor_movie_id')
-        query = "INSERT INTO Predecessor (movie_id, predecessor_id) VALUES (%s, %s)"
+        query = "INSERT INTO Predecessor (movie_id, predecessor_movie_id) VALUES (%s, %s)"
         cursor.execute(query, (movie_id, predecessor_id))
         mysql_conn.commit()
         return "<p>Predecessor is added</p>"
