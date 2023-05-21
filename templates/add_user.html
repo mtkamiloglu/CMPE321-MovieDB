@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kullanıcı Ekle</title>
+</head>
+<body>
+    <h2>Kullanıcı Ekle</h2>
+    <form action="/manager/add_user" method="POST">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username"><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname"><br><br>
+
+        <label for="role">Role:</label>
+        <select id="role" name="role" onchange="showFields(this.value)">
+            <option value="user">Audience</option>
+            <option value="director">Director</option>
+        </select><br><br>
+
+        <div id="directorFields" style="display: none;">
+            <label for="nation">Nation:</label>
+            <input type="text" id="nation" name="nation"><br><br>
+
+            <label for="platform_id">Platform ID:</label>
+            <input type="text" id="platform_id" name="platform_id"><br><br>
+        </div>
+
+        <input type="submit" value="Kullanıcı Ekle">
+    </form>
+
+    <script>
+        function showFields(role) {
+            var directorFields = document.getElementById("directorFields");
+            if (role === "director") {
+                directorFields.style.display = "block";
+            } else {
+                directorFields.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
