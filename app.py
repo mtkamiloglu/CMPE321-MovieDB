@@ -150,9 +150,18 @@ def add_movie():
         return "<p>Movie is added</p>"
 
 # directors should be able to add predeccessor to a movie
-@app.route('/director/add_predecessor')
+@app.route('/director/add_predecessor', methods=['GET', 'POST'])
 def add_predecessor():
-    return "<p>Add Predecessor</p>"
+    if request.method == 'GET':
+        return render_template('add_predecessor.html')
+    else:
+        movie_id = request.form.get('movie_id')
+        predecessor_id = request.form.get('predecessor_movie_id')
+        query = "INSERT INTO Predecessor (movie_id, predecessor_id) VALUES (%s, %s)"
+        cursor.execute(query, (movie_id, predecessor_id))
+        mysql_conn.commit()
+        return "<p>Predecessor is added</p>"
+
 
 # direrectors should be able to view all movies that they directed
 @app.route('/director/view_movies')
