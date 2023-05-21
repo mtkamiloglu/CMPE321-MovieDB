@@ -74,9 +74,18 @@ def delete_audience():
     return "<p>Delete Audience</p>"
 
 # db managers should be able to update platform id
-@app.route('/manager/update_platform_id')
+@app.route('/manager/update_platform_id', methods=['GET','POST'])
 def update_platform_id():
-    return "<p>Update Platform ID</p>"
+    if request.method == 'GET':
+        return render_template('update_platform_id.html')
+    else:
+        director_user_name = request.form.get('director_username')
+        platform_id = request.form.get('platform_id')
+        query = "UPDATE Director SET platform_id = %s WHERE user_name = %s"
+        cursor.execute(query, (platform_id, director_user_name))
+        mysql_conn.commit()
+        return "<p>Platform id is updated</p>"
+
 
 # db managers should be able to see all directors
 @app.route('/manager/see_directors', methods=['GET', 'POST'])
