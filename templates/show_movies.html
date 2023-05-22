@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Directors List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th:not(:last-child), td:not(:last-child) {
+            padding-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Sessions List</h1>
+    <table>
+        <tr>
+            <th>Movie ID</th>
+            <th>Movie Name</th>
+            <th>Theatre ID</th>
+            <th>District</th>
+            <th>Time Slot</th>
+        </tr>
+        {% for session in movies %}
+        <tr>
+            <td>{{ session[0] }}</td>
+            <td>{{ session[1] }}</td>
+            <td>{{ session[2] }}</td>
+            <td>{{ session[3] }}</td>
+            <td>{{ session[4] }}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

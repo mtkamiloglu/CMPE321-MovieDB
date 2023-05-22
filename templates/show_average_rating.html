@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Average Rating</title>
+</head>
+<body>
+    <h1>Average Rating</h1>
+    {% if result %}
+        <p>Movie ID: {{ result[0] }}</p>
+        <p>Name: {{ result[1] }}</p>
+        <p>Average Rating: {{ result[2] }}</p>
+    {% else %}
+        <p>No movie found with the given ID.</p>
+    {% endif %}
+</body>
+</html>
