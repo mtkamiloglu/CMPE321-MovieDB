@@ -47,6 +47,7 @@ def add_movie():
         query = "INSERT INTO Movie (movie_id, name, duration, average_rating, director_user_name, genres) VALUES (%s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (movie_id, movie_name, duration, '0', director_user_name, genres))
         mysql_conn.commit()
+        # movie sessiona ekleme
         return "<p>Movie is added</p>"
 
 # directors should be able to add predeccessor to a movie
@@ -69,9 +70,26 @@ def view_movies():
     return "<p>View Movies</p>"
 
 # directors should be able to view all audiences who bought a ticket for a movie directed by them
-@app.route('/director/view_audiences')
+@app.route('/director/view_audiences', methods=['GET', 'POST'])
 def view_audiences():
-    return "<p>View Audiences</p>"
+    if request.method == 'GET':
+        return render_template('view_audiences.html')
+    else:
+        movie_id = request.form.get('movie_id')
+        director_user_name = session.get('username')
+        query = '''
+            SELECT a.user_name, a.name, a.surname from Audience as a
+            inner join Bought_Ticket as b on a.user_name = b.audience_user_name
+            inner join Movie as m on b.movie_id = m.movie_id
+            inner join Director as d on m.director_user_name = d.user_name
+            where b.movie_id = %s and d.user_name = %s
+            '''
+        cursor.execute(query, (movie_id, director_user_name))
+        mysql_conn.commit()
+        result = cursor.fetchall()
+        jsonStr = json.dumps(result)
+        jsonArr = json.loads(jsonStr)
+        return render_template('show_audiences.html', audiences=jsonArr)
 
 # directors should be able to update the name of a movie directed by them
 @app.route('/director/update_movie_name')
