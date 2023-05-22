@@ -7,8 +7,8 @@ app.secret_key = 'super secret key'
  
 HOST = 'localhost'
 USER = 'root'
-PASSWD = 'mydata'
-DATABASE = 'moviesystem'
+PASSWD = 'tayyip2001'
+DATABASE = 'movies'
 
 mysql_conn = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWD, db=DATABASE)
 cursor = mysql_conn.cursor()
@@ -38,7 +38,6 @@ def login():
             cursor.execute(query, (username, password))
             mysql_conn.commit()
             result = cursor.fetchone()
-            print(result)
 
             if result:
                 session['username'] = username
@@ -52,7 +51,6 @@ def login():
             cursor.execute(query, (username, password))
             mysql_conn.commit()
             result = cursor.fetchone()
-            print(result)
 
             if result:
                 return render_template('manager_dashboard.html')
@@ -65,7 +63,6 @@ def login():
             cursor.execute(query, (username, password))
             mysql_conn.commit()
             result = cursor.fetchone()
-            print(result)
 
             if result:
                 return render_template('audience_dashboard.html')
