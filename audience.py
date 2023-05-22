@@ -28,10 +28,12 @@ def list_movies():
 
     
 
+
 # audiences sould be able to buy a movie ticket
 @app.route('/audience/buy_ticket')
 def buy_ticket():
     return "<p>Buy Ticket</p>"
+
 
 # audiences should be able to view the tickets they bought
 @app.route('/audience/view_tickets')

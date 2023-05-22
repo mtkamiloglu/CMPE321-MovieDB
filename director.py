@@ -4,33 +4,11 @@ import json
 from .app import app, mysql_conn, cursor
 
 
-# directors should be able to login to the system
-# @app.route('/director/login', methods=['GET', 'POST'])
-# def director_login():
-#     if request.method == 'GET':
-#         return render_template('director_login.html')
-    
-#     else:
-#         username = request.form.get('username')
-#         password = request.form.get('password')
-
-#         query = "SELECT * FROM Director WHERE user_name = %s AND password = %s"
-#         cursor.execute(query, (username, password))
-#         mysql_conn.commit()
-#         result = cursor.fetchone()
-#         print(result)
-
-#         if result:
-#             session['username'] = username
-#             return "<p>Login Successful</p>"
-#         else:
-#             return "<p>Username or password is wrong</p>"
-
-
 # directors should be able to list all theatres available for the given slot
 @app.route('/director/list_theatres')
 def list_theatres():
     return "<p>List Theatres</p>"
+
 
 # directors should be able add movies
 @app.route('/director/add_movie', methods=['GET', 'POST'])
@@ -49,6 +27,7 @@ def add_movie():
         mysql_conn.commit()
         # movie sessiona ekleme
         return "<p>Movie is added</p>"
+
 
 # directors should be able to add predeccessor to a movie
 @app.route('/director/add_predecessor', methods=['GET', 'POST'])
@@ -69,6 +48,7 @@ def add_predecessor():
 def view_movies():
     
     return "<p>View Movies</p>"
+
 
 # directors should be able to view all audiences who bought a ticket for a movie directed by them
 @app.route('/director/view_audiences', methods=['GET', 'POST'])
@@ -91,6 +71,7 @@ def view_audiences():
         jsonStr = json.dumps(result)
         jsonArr = json.loads(jsonStr)
         return render_template('show_audiences.html', audiences=jsonArr)
+
 
 # directors should be able to update the name of a movie directed by them
 @app.route('/director/update_movie_name', methods=['GET', 'POST'])

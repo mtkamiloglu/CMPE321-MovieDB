@@ -4,30 +4,6 @@ import json
 from .app import app, mysql_conn, cursor
 
 
-# database managers should be able to login
-# @app.route('/manager/login', methods=['GET', 'POST'])
-# def login():
-    
-#     if request.method == 'GET':
-#         return render_template('manager_login.html')
-    
-#     else:
-#         username = request.form.get('username')
-#         password = request.form.get('password')
-
-#         query = "SELECT * FROM Database_Manager WHERE user_name = %s AND password = %s"
-#         cursor.execute(query, (username, password))
-#         mysql_conn.commit()
-#         result = cursor.fetchone()
-#         print(result)
-
-#         if result:
-#             return "<p>Login Successful</p>"
-#         else:
-#             return "<p>Username or password is wrong</p>"
-
-
-
 # database managers should be able to add new users
 @app.route('/manager/add_user', methods=['GET', 'POST'])
 def add_user():
@@ -54,6 +30,7 @@ def add_user():
             cursor.execute(query, (user_name, password, name, surname))
             mysql_conn.commit()
             return "<p>Audience is added</p>"
+
 
 # db managers should be able to delete audience
 @app.route('/manager/delete_audience', methods=['GET', 'POST'])
@@ -85,7 +62,6 @@ def delete_audience():
             return "<p>User deleted successfully</p>"
 
 
-
 # db managers should be able to update platform id
 @app.route('/manager/update_platform_id', methods=['GET','POST'])
 def update_platform_id():
@@ -111,6 +87,7 @@ def see_directors():
     mysql_conn.commit()
     return render_template('see_directors.html', directors=jsonArr)
 
+
 # db managers should be able to see all ratings of a user
 @app.route('/manager/see_ratings', methods=['GET', 'POST'])
 def see_ratings():
@@ -132,7 +109,6 @@ def see_ratings():
         return render_template('ratings_list.html', ratings=result)
 
 
-
 # db managers should be able to see all movies of a director
 @app.route('/manager/see_movies', methods=['GET', 'POST'])
 def see_movies():
@@ -152,6 +128,7 @@ def see_movies():
         jsonArr = json.loads(jsonStr)
         mysql_conn.commit()
         return render_template('show_movies.html', movies=jsonArr)
+
 
 # db manager should be able to see average rating of a movie
 @app.route('/manager/see_average_rating', methods=['GET', 'POST'])
