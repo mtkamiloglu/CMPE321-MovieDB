@@ -42,7 +42,7 @@ def login():
 
             if result:
                 session['username'] = username
-                return "<p>Login Successful</p>"
+                return render_template('director_dashboard.html')
             else:
                 return "<p>Username or password is wrong</p>"
             
@@ -55,7 +55,7 @@ def login():
             print(result)
 
             if result:
-                return "<p>Login Successful</p>"
+                return render_template('manager_dashboard.html')
             else:
                 return "<p>Username or password is wrong</p>"
             
@@ -68,7 +68,7 @@ def login():
             print(result)
 
             if result:
-                return "<p>Login Successful</p>"
+                return render_template('audience_dashboard.html')
             else:
                 return "<p>Username or password is wrong</p>"
             
