@@ -5,26 +5,26 @@ from .app import app, mysql_conn, cursor
 
 
 # directors should be able to login to the system
-@app.route('/director/login', methods=['GET', 'POST'])
-def director_login():
-    if request.method == 'GET':
-        return render_template('director_login.html')
+# @app.route('/director/login', methods=['GET', 'POST'])
+# def director_login():
+#     if request.method == 'GET':
+#         return render_template('director_login.html')
     
-    else:
-        username = request.form.get('username')
-        password = request.form.get('password')
+#     else:
+#         username = request.form.get('username')
+#         password = request.form.get('password')
 
-        query = "SELECT * FROM Director WHERE user_name = %s AND password = %s"
-        cursor.execute(query, (username, password))
-        mysql_conn.commit()
-        result = cursor.fetchone()
-        print(result)
+#         query = "SELECT * FROM Director WHERE user_name = %s AND password = %s"
+#         cursor.execute(query, (username, password))
+#         mysql_conn.commit()
+#         result = cursor.fetchone()
+#         print(result)
 
-        if result:
-            session['username'] = username
-            return "<p>Login Successful</p>"
-        else:
-            return "<p>Username or password is wrong</p>"
+#         if result:
+#             session['username'] = username
+#             return "<p>Login Successful</p>"
+#         else:
+#             return "<p>Username or password is wrong</p>"
 
 
 # directors should be able to list all theatres available for the given slot
@@ -63,9 +63,10 @@ def add_predecessor():
         return "<p>Predecessor is added</p>"
 
 
-# direrectors should be able to view all movies that they directed
-@app.route('/director/view_movies')
+# directors should be able to view all movies that they directed
+@app.route('/director/view_movies', methods=['GET'])
 def view_movies():
+    
     return "<p>View Movies</p>"
 
 # directors should be able to view all audiences who bought a ticket for a movie directed by them
@@ -74,6 +75,16 @@ def view_audiences():
     return "<p>View Audiences</p>"
 
 # directors should be able to update the name of a movie directed by them
-@app.route('/director/update_movie_name')
+@app.route('/director/update_movie_name', methods=['GET', 'POST'])
 def update_movie_name():
-    return "<p>Update Movie Name</p>"
+    if request.method == 'GET':
+        return render_template('update_movie_name.html')
+    else:
+        movie_id = request.form.get('movie_id')
+        new_movie_name = request.form.get('new_movie_name')
+
+        query = "UPDATE Movie SET name = %s WHERE movie_id = %s"
+        cursor.execute(query, (new_movie_name, movie_id))
+        mysql_conn.commit()
+
+        return "<p>Movie name updated successfully</p>"
