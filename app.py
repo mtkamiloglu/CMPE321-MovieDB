@@ -7,8 +7,8 @@ app.secret_key = 'super secret key'
  
 HOST = 'localhost'
 USER = 'root'
-PASSWD = 'mydata'
-DATABASE = 'moviesystem'
+PASSWD = 'tayyip2001'
+DATABASE = 'movies'
 
 mysql_conn = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWD, db=DATABASE)
 cursor = mysql_conn.cursor()
