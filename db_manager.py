@@ -5,26 +5,26 @@ from .app import app, mysql_conn, cursor
 
 
 # database managers should be able to login
-@app.route('/manager/login', methods=['GET', 'POST'])
-def login():
+# @app.route('/manager/login', methods=['GET', 'POST'])
+# def login():
     
-    if request.method == 'GET':
-        return render_template('manager_login.html')
+#     if request.method == 'GET':
+#         return render_template('manager_login.html')
     
-    else:
-        username = request.form.get('username')
-        password = request.form.get('password')
+#     else:
+#         username = request.form.get('username')
+#         password = request.form.get('password')
 
-        query = "SELECT * FROM Database_Manager WHERE user_name = %s AND password = %s"
-        cursor.execute(query, (username, password))
-        mysql_conn.commit()
-        result = cursor.fetchone()
-        print(result)
+#         query = "SELECT * FROM Database_Manager WHERE user_name = %s AND password = %s"
+#         cursor.execute(query, (username, password))
+#         mysql_conn.commit()
+#         result = cursor.fetchone()
+#         print(result)
 
-        if result:
-            return "<p>Login Successful</p>"
-        else:
-            return "<p>Username or password is wrong</p>"
+#         if result:
+#             return "<p>Login Successful</p>"
+#         else:
+#             return "<p>Username or password is wrong</p>"
 
 
 
@@ -56,9 +56,35 @@ def add_user():
             return "<p>Audience is added</p>"
 
 # db managers should be able to delete audience
-@app.route('/manager/delete_audience')
-def delete_audience(): 
-    return "<p>Delete Audience</p>"
+@app.route('/manager/delete_audience', methods=['GET', 'POST'])
+def delete_audience():
+    if request.method == 'GET':
+        return render_template('delete_user.html')
+    
+    else:
+        username = request.form.get('username')
+        
+        query = "DELETE FROM Audience WHERE user_name = %s"
+        cursor.execute(query, [username])
+        
+        is_empty = False
+        if cursor.rowcount == 0:
+            is_empty = True
+        
+        bought_ticket_query = " DELETE FROM bought_ticket WHERE audience_user_name = %s"
+        cursor.execute(bought_ticket_query, [username])
+        
+        subscription_query = "DELETE FROM Subscription WHERE audience_user_name = %s"
+        cursor.execute(subscription_query, [username]) 
+        
+        mysql_conn.commit()
+                
+        if is_empty:
+            return "<p>User not found</p>"
+        else:
+            return "<p>User deleted successfully</p>"
+
+
 
 # db managers should be able to update platform id
 @app.route('/manager/update_platform_id', methods=['GET','POST'])
@@ -86,9 +112,25 @@ def see_directors():
     return render_template('see_directors.html', directors=jsonArr)
 
 # db managers should be able to see all ratings of a user
-@app.route('/manager/see_ratings')
+@app.route('/manager/see_ratings', methods=['GET', 'POST'])
 def see_ratings():
-    return "<p>See Ratings</p>"
+    if request.method == 'GET':
+        return render_template('see_ratings.html')
+    
+    else:
+        username = request.form.get('username')
+        
+        query = """
+        SELECT M.movie_id, M.name, R.rate
+        FROM Rate R
+        INNER JOIN Movie M ON R.movie_id = M.movie_id
+        WHERE R.audience_user_name = %s
+        """
+        cursor.execute(query, [username])
+        result = cursor.fetchall()
+        
+        return render_template('ratings_list.html', ratings=result)
+
 
 
 # db managers should be able to see all movies of a director

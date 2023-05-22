@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      form {
+        width: 300px;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+
+      input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Update Movie Name</h1>
+    <form method="POST" action="/director/update_movie_name">
+      <label for="movie_id">Movie ID:</label>
+      <input type="text" id="movie_id" name="movie_id"><br><br>
+      <label for="new_movie_name">New Movie Name:</label>
+      <input type="text" id="new_movie_name" name="new_movie_name"><br><br>
+      <input type="submit" value="Update">
+    </form>
+  </body>
+</html>

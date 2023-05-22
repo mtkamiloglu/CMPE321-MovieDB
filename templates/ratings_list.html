@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Ratings List</h1>
+    <table>
+      <tr>
+        <th>Movie ID</th>
+        <th>Movie Name</th>
+        <th>Rating</th>
+      </tr>
+      {% for rating in ratings %}
+      <tr>
+        <td>{{ rating[0] }}</td>
+        <td>{{ rating[1] }}</td>
+        <td>{{ rating[2] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
