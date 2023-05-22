@@ -38,7 +38,6 @@ def login():
             cursor.execute(query, (username, password))
             mysql_conn.commit()
             result = cursor.fetchone()
-            print(result)
 
             if result:
                 session['username'] = username
@@ -52,9 +51,9 @@ def login():
             cursor.execute(query, (username, password))
             mysql_conn.commit()
             result = cursor.fetchone()
-            print(result)
 
             if result:
+                session['username'] = username
                 return "<p>Login Successful</p>"
             else:
                 return "<p>Username or password is wrong</p>"
@@ -65,9 +64,9 @@ def login():
             cursor.execute(query, (username, password))
             mysql_conn.commit()
             result = cursor.fetchone()
-            print(result)
 
             if result:
+                session['username'] = username
                 return "<p>Login Successful</p>"
             else:
                 return "<p>Username or password is wrong</p>"

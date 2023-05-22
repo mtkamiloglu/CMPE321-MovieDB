@@ -36,4 +36,20 @@ def buy_ticket():
 # audiences should be able to view the tickets they bought
 @app.route('/audience/view_tickets')
 def view_tickets():
-    return "<p>View Tickets</p>"
+    user_name = session.get('username')
+    query = '''
+        SELECT m.movie_id, m.name, ms.session_id, r.rate, m.average_rating
+        FROM Audience as a
+        JOIN Bought_Ticket AS bt ON a.user_name = bt.audience_user_name
+        JOIN Movie AS m on bt.movie_id = m.movie_id
+        JOIN Movie_Session AS ms ON bt.session_id = ms.session_id
+        LEFT JOIN Rate AS r ON r.audience_user_name = bt.audience_user_name 
+        AND r.movie_id = bt.movie_id
+        WHERE bt.audience_user_name = %s
+    '''
+    cursor.execute(query, [user_name])
+    result = cursor.fetchall()
+    jsonStr = json.dumps(result)
+    jsonArr = json.loads(jsonStr)
+    mysql_conn.commit()
+    return render_template('view_tickets.html', tickets=jsonArr)

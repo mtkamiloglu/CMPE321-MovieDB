@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bought Movies List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th:not(:last-child), td:not(:last-child) {
+            padding-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>See Bought Movies List</h1>
+    <table>
+        <tr>
+            <th>Movie ID</th>
+            <th>Movie Name</th>
+            <th>Session ID</th>
+            <th>Rating</th>
+            <th>Overall Rating</th>
+        </tr>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket[0] }}</td>
+            <td>{{ ticket[1] }}</td>
+            <td>{{ ticket[2] }}</td>
+            <td>{{ ticket[3] }}</td>
+            <td>{{ ticket[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
