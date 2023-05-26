@@ -1,16 +1,21 @@
 from flask import Flask, request, render_template, jsonify, session
 import MySQLdb
 import json
+from dotenv import load_dotenv
+import os
+
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
  
-HOST = 'localhost'
-USER = 'root'
-PASSWD = 'tayyip2001'
-DATABASE = 'movies'
+load_dotenv()
 
-mysql_conn = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWD, db=DATABASE)
+HOST = os.getenv('HOST')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWD = os.getenv('DB_PASSWD')
+DATABASE = os.getenv('DATABASE')
+
+mysql_conn = MySQLdb.connect(host=HOST, user=DB_USER, passwd=DB_PASSWD, db=DATABASE)
 cursor = mysql_conn.cursor()
 
 from .audience import list_movies, buy_ticket, view_tickets
@@ -53,6 +58,7 @@ def login():
             result = cursor.fetchone()
 
             if result:
+                session['username'] = username
                 return render_template('manager_dashboard.html')
             else:
                 return "<p>Username or password is wrong</p>"
@@ -65,6 +71,7 @@ def login():
             result = cursor.fetchone()
 
             if result:
+                session['username'] = username
                 return render_template('audience_dashboard.html')
             else:
                 return "<p>Username or password is wrong</p>"
