@@ -46,8 +46,21 @@ def add_predecessor():
 # directors should be able to view all movies that they directed
 @app.route('/director/view_movies', methods=['GET'])
 def view_movies():
-    
-    return "<p>View Movies</p>"
+    director_user_name = session.get('username') 
+    query ='''
+        SELECT m.movie_id, m.name, ms.theatre_id, ms.time_slot, GROUP_CONCAT(p.predecessor_movie_id) AS predecessors
+        FROM Movie AS m
+        JOIN Movie_Session AS ms ON m.movie_id = ms.movie_id
+        JOIN Predecessor AS p ON m.movie_id = p.movie_id
+        WHERE m.director_user_name = %s
+        GROUP BY m.movie_id, m.name, ms.theatre_id, ms.time_slot
+    '''
+    cursor.execute(query, [director_user_name])
+    mysql_conn.commit()
+    result = cursor.fetchall()
+    jsonStr = json.dumps(result)
+    jsonArr = json.loads(jsonStr)
+    return render_template('view_movies.html', movies=jsonArr)
 
 
 # directors should be able to view all audiences who bought a ticket for a movie directed by them
