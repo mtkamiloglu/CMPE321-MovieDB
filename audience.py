@@ -41,11 +41,21 @@ def list_movies():
 
 
 # audiences sould be able to buy a movie ticket
-@app.route("/audience/buy_ticket")
+@app.route("/audience/buy_ticket", methods=["GET", "POST"])
 def buy_ticket():
-    return "<p>Buy Ticket</p>"
-
-
+    if request.method == "GET":
+        return render_template("buy_ticket.html")
+    else:
+        user_name = session.get("username")
+        session_id = request.form.get("Session_Id")
+        query = "SELECT movie_id FROM Movie_Session WHERE session_id = %s"
+        cursor.execute(query, [session_id])
+        movie_id = cursor.fetchone()[0]
+        query = "INSERT INTO Bought_Ticket (audience_user_name, movie_id, session_id) VALUES (%s, %s, %s)"
+        cursor.execute(query, (user_name, movie_id, session_id))
+        mysql_conn.commit()     
+        return "<p>Successfully bought ticket</p>"
+    
 # audiences should be able to view the tickets they bought
 @app.route("/audience/view_tickets")
 def view_tickets():
